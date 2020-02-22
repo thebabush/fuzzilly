@@ -5,7 +5,9 @@
 Fuzzilly is a PoC LLVM-based tool to *unroll* a program's execution.
 It does so by instrumenting the LLVM IR of the target in such a way that during
 execution it will dump its own memory accesses.
-After that, it reconstruct the execution without any conditional statement.
+After that, it reconstructs the execution without any conditional statement.
+
+It is source based.
 
 I know the name is
 [unfortunate](https://github.com/googleprojectzero/fuzzilli), but I made this
@@ -42,6 +44,10 @@ Have llvm-9 installed and then
 cd build && make check && cd ..
 ./test.sh && ./retrace.sh && ./test/retraced
 ```
+
+## Why?
+
+Why not?
 
 ## Limitations
 
