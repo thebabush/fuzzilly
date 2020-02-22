@@ -7,7 +7,7 @@ It does so by instrumenting the LLVM IR of the target in such a way that during
 execution it will dump its own memory accesses.
 After that, it reconstructs the execution without any conditional statement.
 
-It is source based.
+It is source-based.
 
 I know the name is
 [unfortunate](https://github.com/googleprojectzero/fuzzilli), but I made this
@@ -58,4 +58,8 @@ it has builtin IR operations made specifically for varargs, but it generates IR
 that mixes them with normal memory accesses to the arguments.
 Long story short: in order to support varargs on X86-64, one would need to
 reimplement the SystemV ABI inside fuzzilly.
+
+## Info
+
+I did this during my time at [Politecnico di Milano's NECSTLab](https://necst.it/).
 
