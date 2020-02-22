@@ -1,0 +1,14 @@
+build
+*xz
+llvm_src/
+llvm_build/
+.idea/
+cmake-build-debug/
+generated/
+test/retraced
+ls_copied
+.gdb_history
+*.ll
+*.bc
+*.dot
+*.bin

@@ -1,0 +1,1 @@
+ADD_LIBRARY(fuzzilly STATIC fzl.cpp ${FZL_COMMON_SOURCES})

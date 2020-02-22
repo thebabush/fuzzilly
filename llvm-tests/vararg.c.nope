@@ -1,0 +1,47 @@
+// RUN: clang %s -O0 -S -emit-llvm -o %t.ll
+// RUN: llvm-link %t.ll -S -o %t.ll
+// RUN: opt -load=%bindir/passes/BasicBlockTagger/BasicBlockTaggerPass.so --basic_block_tagger %t.ll -S -o %t.meta.ll
+// RUN: opt -load=%bindir/passes/BasicBlockInstr/BasicBlockInstrPass.so --basic_block_instr %t.meta.ll -S -o %t.tracer.ll
+// RUN: clang++ -O0 %t.tracer.ll -o %t.tracer.bin %bindir/runtime/libfuzzilly.a
+// RUN: export FZL_TRACE_FILE=%t.trace; %t.tracer.bin > %t.tracer.stdout
+// RUN: %bindir/tools/Retrace/fuzzilly-retrace -S -i %t.meta.ll -t %t.trace -o %t.retraced.ll
+// RUN: clang -o %t.retraced.bin %t.retraced.ll
+// RUN: %t.retraced.bin arg arg > %t.retraced.stdout; diff %t.retraced.stdout %t.tracer.stdout
+
+#include <stdio.h>
+#include <stdarg.h>
+
+
+void printer(const char* fmt, ...) {
+  va_list args;
+  va_start(args, fmt);
+
+  while (*fmt != '\0') {
+    switch (*fmt) {
+    case 'd': {
+      int d = va_arg(args, int);
+      printf("%d\n", d);
+      break;
+    }
+    case 'f': {
+      double f = va_arg(args, double);
+      printf("%f\n", f);
+    }
+    }
+
+    ++fmt;
+  }
+
+  va_end(args);
+}
+
+int main(int argc, char *argv[]) {
+  if (argc == 1) {
+    printer("df", 666, 666.0);
+  } else {
+    puts("NOT ONE");
+  }
+
+  return 0;
+}
+
